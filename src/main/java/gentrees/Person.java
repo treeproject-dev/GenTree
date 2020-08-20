@@ -1,6 +1,6 @@
 package gentrees;
 
-import java.sql.Date;
+import java.util.Date;
 import java.time.LocalDate;
 
 public class Person {
@@ -67,7 +67,6 @@ public class Person {
 	}
 
 	public Date getDateBirth() {
-
 		return dateBirth;
 	}
 
