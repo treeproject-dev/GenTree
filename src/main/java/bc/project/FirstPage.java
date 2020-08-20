@@ -24,11 +24,21 @@ public class FirstPage {
 	public String select() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("<a href='/find'>Find By Name</a>");
+		sb.append("<a href='/find'>Find By Name</a><br/>");
+		sb.append("<a href='/second'>test</a>");
 
 		return sb.toString();
 	}
-
+	@RequestMapping("/test")
+	public String test() {
+		StringBuilder sb = new StringBuilder();
+		
+		
+		
+		return sb.toString();
+	}
+	
+	
 	@RequestMapping("/find")
 	@ResponseBody
 	public String find(@RequestParam(value = "name", required = false) String name,
@@ -51,10 +61,11 @@ public class FirstPage {
 			// sb.append("<style>table, th, td {border: 1px solid black;}</style>");
 			 sb.append("<tr><td>Id</td><td>Name</td><td>Surname</td></tr>");
 			 for(Person it:persons) {
-				 sb.append("<tr><td>"+it.getId()+"</td><td>"+it.getFirstName()+"</td><td>"+it.getSurName()+"</td></tr>");
+				 String callF = "<a href=/findbyid?id="+it.getId()+">"+it.getId()+"</a>";
+				 sb.append("<tr><td>"+callF+"</td><td>"+it.getFirstName()+"</td><td>"+it.getSurName()+"</td></tr>");
 			 }
-			 sb.append("</table>");
-		 }
+			 sb.append("</table><br/>");
+			 }
 
 		sb.append("<a href='/'>Back</a>");
 		return sb.toString();
