@@ -114,4 +114,23 @@ public class Person {
 		return firstName + " " + surName + " " + gender + " " + ((dateBirth==null)?"":dateBirth) + " ";
 	}
 
+	public String sendJSON(Person person) {
+		String message = "{\"id\":\"" + person.id + ",\r\n" + 
+				" \"name\":\"" + person.firstName + ",\r\n" + 
+				" \"surname\":\"" + person.surName + ",\r\n" + 
+				" \"gender\":\"" + person.gender + ",\r\n" + 
+				" \"birth\":\"" + person.dateBirth + ",\r\n" + 
+				" \"death\":\"" + person.death + ",\r\n" + 
+				" \"family\":null,\r\n" + 
+				" \"x\":100,\r\n" + 
+				" \"y\":100,\r\n" + 
+				" \"active\":false,\r\n" + 
+				" \"hiden\":false,\r\n" + 
+				" \"move\":false}";
+
+		
+		return message;
+	}
+
 }
+
