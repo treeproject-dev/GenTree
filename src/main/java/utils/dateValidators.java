@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateValidators {
@@ -11,11 +12,68 @@ public class DateValidators {
 	 *  Обрезать у имен и фамилий пробелы спереди и сзади (но не внутри). т.е Milena Marija = ok
 	 *  
 	 */
-	public boolean isBirthDateLessThanDeath(Date birthDate) {
+	public boolean isBirthDateLessThanDeath(Date birthDate, Date death) {
 		boolean status = false;
-		//
-		//
-		//
+		if(birthDate.before(death))
+			return true;
+		
+		return status;
+	}
+	
+	public boolean isBirthDateGreaterThanToday(Date birthDate) {
+		Date today = Calendar.getInstance().getTime();
+		boolean status = false;
+		if(birthDate.after(today))
+			return true;
+		
+		return status;
+	}
+	
+	public boolean ifNameHasNumbers(String name) {
+		boolean status = true;
+		if(name.matches(".*\\d+.*"))
+			return false;
+		
+		return status;
+	}
+	
+	public boolean ifSurnameHasNumbers(String surname) {
+		boolean status = true;
+		if(surname.matches(".*\\d+.*"))
+			return false;
+		
+		return status;
+	}
+	
+	public boolean hasNameFirstCharSpace(String name) {
+		boolean status = false;
+		if(name.startsWith(" "))
+			return true;
+		
+		return status;
+	}
+	
+	public boolean hasNameLastCharSpace(String name) {
+		boolean status = false;
+		if(name.endsWith(" "))
+			return true;
+		
+		return status;
+	}
+	
+	public boolean hasSurnameFirstCharSpace(String surname) {
+		boolean status = false;
+		if(surname.startsWith(" "))
+			return true;
+		
+		return status;
+	}
+	public boolean hasSurnameLastCharSpace(String surname) {
+		boolean status = false;
+		if(surname.endsWith(" "))
+			return true;
+		
 		return status;
 	}
 }
+
