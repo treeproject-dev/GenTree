@@ -6,31 +6,31 @@ import java.sql.DriverManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-
-//@Component
+import org.springframework.stereotype.Service;
+//@Configuration
+//@PropertySource("application.properties")
+@Component
 public class AppConnect 
 {
-	protected Connection conn;
-	protected Environment env;
-	String url,user,pass;
-	//@Autowired
+	@Autowired
+    private Environment env;
+	
+	
+	@Value("${my.name}")private String name;
+	
+	public Connection conn;
+	
 	public AppConnect(){
-		 try {
-	            File propertiesFile = new File("./" + "application.properties");
-	            if (propertiesFile.exists()){
-	            	System.out.println("file ok");
-	            	}
-	            } catch(Exception e) {
-	            	System.err.println(e.toString());
-	            }
 		
-		
-		
-		
+		//System.out.println("PRINT FROM ENV: "+ env.getProperty("spring.datasource.username"));
 	try {
-			url = "jdbc:mysql://www.999.id.lv/?autoReconnect=true&serverTimezone=UTC&characterEncoding=utf8";
+		
+		
+		String url = "jdbc:mysql://www.999.id.lv/?autoReconnect=true&serverTimezone=UTC&characterEncoding=utf8";
 	      Class.forName("com.mysql.cj.jdbc.Driver"); // Load the driver class
 	      conn = DriverManager.getConnection(
 	          url, "root",

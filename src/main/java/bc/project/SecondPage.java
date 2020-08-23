@@ -1,5 +1,7 @@
 package bc.project;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,7 +31,8 @@ public class SecondPage {
 			}
 		if (ids!=0) {
 		FindById findId = new FindById();
-		Person person=findId.findById(ids);
+		List <Person> list =findId.findById(ids);
+		//Person person=
 		
 		sb.append("<canvas id=\"myCanvas\" width=\"1000\" height=\"550\" style=\"margin: 0px; border:2px solid #d3d3d3;\"> ");
 		sb.append("Your browser does not support the HTML5 canvas tag.</canvas>                                    ");
