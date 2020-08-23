@@ -15,6 +15,7 @@ public class FindAllByNames {
 
 	    List<Person> persons = new ArrayList<Person>();
 	    try {
+	    	AppConnect conn = new AppConnect();
 	      String sql = "SELECT * FROM gentrees.persons where person_name LIKE ? AND person_surname LIKE ?";
 	      PreparedStatement preparedStatement = conn.conn.prepareStatement(sql);
 	      preparedStatement.setString(1, "%" + firstName + "%");
@@ -25,6 +26,7 @@ public class FindAllByNames {
 	      while (rs.next()) {
 	        persons.add(new Person(rs.getInt(1), rs.getString(2), rs.getString(3)));
 	      }
+	      conn.conn.close();
 
 	    } catch (SQLException e) {
 	      //  Auto-generated catch block

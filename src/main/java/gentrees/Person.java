@@ -11,6 +11,7 @@ public class Person {
 	public Person myMother;
 	public String gender="Unknown";
 	public int age;
+	public int mid;
 
 	public Person() {
 		this.firstName = "First Name";
@@ -19,11 +20,12 @@ public class Person {
 	}
 
 //constructers
-	public Person(String firstName, String surName, String gender, Date dateBirth) {
+	public Person(String firstName, String surName, String gender, Date dateBirth, int mid) {
 		this.firstName = firstName;
 		this.surName = surName;
 		this.gender = gender;
 		this.dateBirth = dateBirth;
+		this.mid = mid;
 
 	}
 

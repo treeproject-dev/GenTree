@@ -10,6 +10,7 @@ public class DateConverters {
 
 	public boolean isCorrectDate(String strDate) {
 		boolean answer = false;
+		//if (strDate.equals(""))return false;
 		try {
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
 			answer = true;

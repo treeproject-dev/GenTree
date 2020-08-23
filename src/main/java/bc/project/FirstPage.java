@@ -27,9 +27,10 @@ public class FirstPage {
 	@RequestMapping("/")
 	public String select() {
 		StringBuilder sb = new StringBuilder();
-
-		sb.append("<a href='/find'>Find By Name</a><br/>");
-		sb.append("<a href='/save'>Save new person</a>");
+		String header = "<html><head><title>FindByID page</title><meta charset=\"utf-8\"><link rel=\"stylesheet\" href=\"/css/design.css\"></head><body>";	
+		sb.append(header);
+		sb.append("<p><a href='/find'>Find By Name</a><br/>");
+		sb.append("<a href='/save'>Save new person</a></p>");
 
 		return sb.toString();
 	}
@@ -39,36 +40,47 @@ public class FirstPage {
 	public String test(HttpServletRequest request, HttpServletResponse response) {
 
 		StringBuilder sb = new StringBuilder();
-		sb.append("<form action=''>                                                 ");
+		String header = "<html><head><title>FindByID page</title><meta charset=\"utf-8\"><link rel=\"stylesheet\" href=\"/css/design.css\"></head><body>";	
+		sb.append(header);
+		sb.append("<p><form action=''>                                              ");
 		sb.append("  <label for='fname'>First name:</label><br/>                    ");
-		sb.append("  <input type='text' name='name' value=''><br/>                    ");
+		sb.append("  <input type='text' name='name' value=''><br/>                  ");
 		sb.append("  <label for='lname'>Last name:</label><br/>                     ");
-		sb.append("  <input type='text' name='surname'  value=''><br/>               ");
+		sb.append("  <input type='text' name='surname'  value=''><br/>              ");
 		sb.append("  <label for='lname'>Date of Birth:</label><br/>                 ");
-		sb.append("	<input type='date' name='date'><br/><br/>                         ");
-		sb.append("<input type='radio' name='gender' value='male'>        ");
+		sb.append("	<input type='date' name='date'><br/><br/>                       ");
+		sb.append("  <label for='lname'>Date of Death:</label><br/>                 ");
+		sb.append("	<input type='date' name='datedead'><br/><br/>                   ");
+		sb.append("<input type='radio' name='gender' value='male'>       			");
 		sb.append("  <label for='male'>Male</label><br>                             ");
-		sb.append("  <input type='radio'  name='gender' value='female'>  ");
+		sb.append("  <input type='radio'  name='gender' value='female'> 		    ");
 		sb.append("  <label for='female'>Female</label><br>                         ");
-		sb.append("  <input type='radio'  name='gender' value='unknown'>");
+		sb.append("  <input type='radio'  name='gender' value='unknown'>			");
 		sb.append("  <label for='unknown'>Unknown</label>                           ");
 		sb.append("<br/><br/>                                                       ");
 		sb.append("  <input type='submit' value='Submit'>                           ");
 		sb.append("</form>                                                          ");
 
 		if (request.getParameter("gender") != (null)) {
-			String name = request.getParameter("name");
+			/*String name = request.getParameter("name");
 			String surname = request.getParameter("surname");
 			String date = request.getParameter("date");
-			String gender = request.getParameter("gender");
-			if (conv.isCorrectDate(date)) {
-				Date dateOk = conv.stringToDate(date);
-				Person person = new Person(name, surname, gender, dateOk);
-				InsertPersons save = new InsertPersons();
-
+			String datedead = request.getParameter("datedead");
+			String gender = request.getParameter("gender");*/
+			Person person = new Person();
+			if (request.getParameter("date")!=""&&!request.getParameter("date").equals(null)){if(conv.isCorrectDate(request.getParameter("date"))) {person.setDateBirth(conv.stringToDate(request.getParameter("date")));}}
+			if (request.getParameter("datedead")!=""&&!request.getParameter("datedead").equals(null)){if(conv.isCorrectDate(request.getParameter("datedead"))) {person.setDeath(conv.stringToDate(request.getParameter("datedead")));}}	
+			
+			person.setFirstName(request.getParameter("name"));	
+			person.setSurName(request.getParameter("surname"));
+			person.setGender(request.getParameter("gender"));
+		if (person.getFirstName()!=""||person.getSurName()!="") {
+			System.out.println(person.toString());
 				try {
-					save.insertPerson(person);
-					sb.append("<p style='color:green'>Person added in DB</p>");
+					InsertPersons save = new InsertPersons();
+					boolean status = save.insertPerson(person);
+					if (status) sb.append("<p style='color:green'>Person added in DB</p>");
+					else sb.append("<p style='color:red'>Error, person not added</p>");
 				} catch (Exception e) {
 					sb.append("<p style='color:red'>Try again with correct information</p>");
 					System.err.println(e);
@@ -76,9 +88,10 @@ public class FirstPage {
 
 			} else {
 				sb.append("<p style='color:red'>Try again with correct information</p>");
-			}
+				}
+			
 		}
-		sb.append("<a href='/'>Back</a>");
+		sb.append("<a href='/'>Back</a></p> ");
 		return sb.toString();
 	}
 
@@ -89,8 +102,9 @@ public class FirstPage {
 			HttpServletResponse response) {
 		FindAllByNames find = new FindAllByNames();
 		StringBuilder sb = new StringBuilder();
-
-		sb.append("<form action=''>");
+		String header = "<html><head><title>FindByID page</title><meta charset=\"utf-8\"><link rel=\"stylesheet\" href=\"/css/design.css\"></head><body>";	
+		sb.append(header);
+		sb.append("<p><form action=''>");
 		sb.append("<label for='fname'>First name:</label><br/>");
 		sb.append("<input type='text' name='name' value=''><br/>");
 		sb.append("<label for='lname'>Last name:</label><br/>");
@@ -111,7 +125,7 @@ public class FirstPage {
 			sb.append("</table><br/>");
 		}
 
-		sb.append("<a href='/'>Back</a>");
+		sb.append("<a href='/'>Back</a></p>");
 		return sb.toString();
 	}
 
