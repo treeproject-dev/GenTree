@@ -1,4 +1,4 @@
-package Connections;
+package app.service;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,8 +8,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import gentrees.Person;
-import gentrees.Wedding;
+import app.database.AppConnect;
+import app.domain.Person;
+import app.domain.Wedding;
 @Component
 public class FindByFamiliesId {
 	

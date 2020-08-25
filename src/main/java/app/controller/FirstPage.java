@@ -1,4 +1,4 @@
-package bc.project;
+package app.controller;
 
 import java.sql.Connection;
 import java.util.Date;
@@ -14,17 +14,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import Connections.AppConnect;
-import Connections.FindAllByNames;
-import Connections.InsertPersons;
-import gentrees.Person;
+import app.database.AppConnect;
+import app.domain.Person;
+import app.service.FindAllByNames;
+import app.service.InsertPersons;
 import utils.DateConverters;
 
 @RestController
 public class FirstPage {
-
+	
+	@Autowired
+	protected AppConnect conn;
+	
 	public static DateConverters conv = new DateConverters();
-	public static AppConnect conn = new AppConnect();
+	//public static AppConnect conn = new AppConnect();
 
 	@RequestMapping("/")
 	public String select() {
@@ -33,11 +36,15 @@ public class FirstPage {
 		sb.append(header);
 		sb.append("<p><a href='/find'>Find By Name</a><br/>");
 		sb.append("<a href='/save'>Save new person</a></p>");
+		sb.append("<a href='/weddings'>Weddings Page</a></p>");
 	
 
 		return sb.toString();
 	}
 
+	@Autowired
+	protected InsertPersons save;
+	
 	@RequestMapping("/save")
 	@ResponseBody
 	public String test(HttpServletRequest request, HttpServletResponse response) {
@@ -65,11 +72,6 @@ public class FirstPage {
 		sb.append("</form>                                                          ");
 
 		if (request.getParameter("gender") != (null)) {
-			/*String name = request.getParameter("name");
-			String surname = request.getParameter("surname");
-			String date = request.getParameter("date");
-			String datedead = request.getParameter("datedead");
-			String gender = request.getParameter("gender");*/
 			Person person = new Person();
 			if (request.getParameter("date")!=""&&!request.getParameter("date").equals(null)){if(conv.isCorrectDate(request.getParameter("date"))) {person.setDateBirth(conv.stringToDate(request.getParameter("date")));}}
 			if (request.getParameter("datedead")!=""&&!request.getParameter("datedead").equals(null)){if(conv.isCorrectDate(request.getParameter("datedead"))) {person.setDeath(conv.stringToDate(request.getParameter("datedead")));}}	
@@ -78,9 +80,8 @@ public class FirstPage {
 			person.setSurName(request.getParameter("surname"));
 			person.setGender(request.getParameter("gender"));
 		if (person.getFirstName()!=""||person.getSurName()!="") {
-			System.out.println(person.toString());
+		
 				try {
-					InsertPersons save = new InsertPersons();
 					boolean status = save.insertPerson(person);
 					if (status) sb.append("<p style='color:green'>Person added in DB</p>");
 					else sb.append("<p style='color:red'>Error, person not added</p>");
@@ -98,12 +99,15 @@ public class FirstPage {
 		return sb.toString();
 	}
 
+	@Autowired
+	protected FindAllByNames findAll;
+	
 	@RequestMapping("/find")
 	@ResponseBody
 	public String find(@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "surname", required = false) String surname, HttpServletRequest request,
 			HttpServletResponse response) {
-		FindAllByNames find = new FindAllByNames();
+		//FindAllByNames find = new FindAllByNames();
 		StringBuilder sb = new StringBuilder();
 		String header = "<html><head><title>FindByID page</title><meta charset=\"utf-8\"><link rel=\"stylesheet\" href=\"/css/design.css\"></head><body>";	
 		sb.append(header);
@@ -116,7 +120,7 @@ public class FirstPage {
 		sb.append("</form><br/>");
 
 		if (name != null && !"".equals(name) && surname != null && !"".equals(surname)) {
-			List<Person> persons = find.findAllByNames(name, surname);
+			List<Person> persons = findAll.findAllByNames(name, surname);
 			sb.append("<table>");
 			// sb.append("<style>table, th, td {border: 1px solid black;}</style>");
 			sb.append("<tr><td>Id</td><td>Name</td><td>Surname</td></tr>");
