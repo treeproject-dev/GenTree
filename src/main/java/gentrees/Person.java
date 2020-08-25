@@ -9,8 +9,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import tree.Tree;
-import tree.Haul;
+import tree.Kleisli;
 import tree.TreeInterface;
+import utils.DateConverters;
 
 public class Person {
 	public String firstName, surName;
@@ -235,53 +236,27 @@ public class Person {
 	
 	// TODO the same date convertions for Date of death. 
 	
-	
-	
-	// TODO fix dates in "toPersonFrame" method.
-	// DEMO VARIANT: FOR ONE PERSON, WITH FIXED FRAME PARAMETERS.
-	public String toPersonFrame(int index) {
-	  
-	  String self = "person"+index;
-	  String gen; 
-
-	  //translate gender					<-- perhaps, separate function.
-	  switch(this.gender) {
-	  case "male":
-		  gen = "M";
-	  break;
-	  case "female":
-		  gen = "F";
-	  break;
-	  default:
-		  gen = "U";
-	  }
-	  
-	  //Create Empty Person;
-      String str = "var "+self+" = new PersonFrame();\n";
-      
-	  //Set Person Parameters;      
-      str+= self +".setPerson(\""+this.firstName 		    + "\",\""
-                                 +this.surName     		    + "\",\""
-	                             +     gen         		    + "\",\""
-	                             +this.dateBirth.toString() + "\",\""
-	                             +this.death.toLocalDate()  + "\");\n";
-
-      //Set Frame Parameters;
-      str+= self + ".setFrame(50,50,false,false,false);\n";    
-      
-	return str;
-	} 
-
-	
 	//TEST:
 	public static void main(String[] args) {
 		Person pers = new Person();
-		pers.firstName = "Alexander";
+		pers.firstName = "Charles";
+		pers.surName   = "Darwin";
+		pers.gender    = "male";
+		pers.dateBirth = new Date(1809,02,12);
+		pers.death	   = new Date(1882,04,19);
+
+		System.out.println(pers.toString());
+		System.out.println(pers.toJSONStr());
+		
+		
+/*
+ 		pers.firstName = "Alexander";
 		pers.surName   = "Pushkin";
 		pers.gender    = "male";
 		pers.dateBirth =  new Date(1799,05,26);
 		pers.death     =  new Date(1837,01,29);
-
+*/
+		
 //		pers.birth         =LocalDate()  
 //				new LocalDate(1799,05,26);
 //		pers.dateDeath     =  new LocalDate(1837,01,29);
@@ -290,43 +265,70 @@ public class Person {
 		
 		System.out.println("PersonFrameConstructor:");
 		
-		System.out.println(pers.toPersonFrame(1));
-		
+	}
+	
+	/* CONVERTORS */
+	
+	public String convertGender() {
+		String gender = "U";
+		if ("male".equals(this.gender))
+           gender = "M";
+		else gender = "F";
+		return gender;
 	}
 	
 	
 	/* SAVE & LOAD */
 	
-	public String sendJSON(Person person) {
-		String message = "{\"id\":\"" + person.id + ",\r\n" + 
-				" \"name\":\"" + person.firstName + ",\r\n" + 
-				" \"surname\":\"" + person.surName + ",\r\n" + 
-				" \"gender\":\"" + person.gender + ",\r\n" + 
-				" \"birth\":\"" + person.dateBirth + ",\r\n" + 
-				" \"death\":\"" + person.death + ",\r\n" + 
+	public String toJSON() {
+		
+		String b = "";
+		String d = "";
+		
+		if (this.dateBirth != null)
+			b = DateConverters.dateToString(this.dateBirth);
+		if (this.death != null)
+			d = DateConverters.dateToString(this.death);
+		
+		return  "{\"id\":\"" + this.pid + "\",\r\n" + 
+				" \"name\":\"" + this.firstName + "\",\r\n" + 
+				" \"surname\":\"" + this.surName + "\",\r\n" + 
+				" \"gender\":\"" + this.convertGender() + "\",\r\n" + 
+				" \"birth\":\"" + b + "\",\r\n" + 
+				" \"death\":\"" + d + "\",\r\n" + 
 				" \"family\":null,\r\n" + 
 				" \"x\":100,\r\n" + 
 				" \"y\":100,\r\n" + 
 				" \"active\":false,\r\n" + 
 				" \"hiden\":false,\r\n" + 
 				" \"move\":false}";
-
 		
-		return message;
 	}
 
-}
+	public String toJSONStr() {
+		
+		String b = "";
+		String d = "";
+		
+		if (this.dateBirth != null)
+			b = DateConverters.dateToString(this.dateBirth);
+		if (this.death != null)
+			d = DateConverters.dateToString(this.death);
+		
+		return "{\"id\":\"" + this.pid + "\"," + 
+				" \"name\":\"" + this.firstName + "\"," + 
+				" \"surname\":\"" + this.surName + "\"," + 
+				" \"gender\":\"" + this.convertGender() + "\"," + 
+				" \"birth\":\"" + b + "\"," + 
+				" \"death\":\"" + d + "\"," + 
+				" \"family\":null," + 
+				" \"x\":100," + 
+				" \"y\":100," + 
+				" \"active\":false," + 
+				" \"hiden\":false," + 
+				" \"move\":false}";
+		
+	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

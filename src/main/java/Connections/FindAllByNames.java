@@ -24,7 +24,11 @@ public class FindAllByNames {
 	      ResultSet rs = preparedStatement.executeQuery();
 	      
 	      while (rs.next()) {
-	        persons.add(new Person(rs.getInt(1), rs.getString(2), rs.getString(3)));
+	    	Person x = new Person();
+	    	       x.pid = rs.getInt(1);
+	    	       x.firstName = rs.getString(2);
+	    	       x.surName = rs.getString(3);
+	        persons.add(x);
 	      }
 	      conn.conn.close();
 

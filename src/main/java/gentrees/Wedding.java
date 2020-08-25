@@ -96,8 +96,14 @@ public class Wedding {
 	};
 	
 	
-	
-	
+	// Wedding -> (mid,pidH,pidW)
+	public String toJson() {
+		return "{ "+
+		  	   "\"mid\":\"" + Integer.toString(this.mid)+"\" , "+
+		  	   "\"pidH\"\"" + Integer.toString(this.pidH)+"\" , "+
+		  	   "\"pidW\"\"" + Integer.toString(this.pidW)+"\""+
+		  	   " }";
+	};
 	
 	
 	
@@ -124,38 +130,16 @@ public class Wedding {
 	
 	private Date weddingDate;
 
-	private Couple couple;
-	
 	public Wedding() {}
-
-	@Override
-	public String toString() {
-		return "Wedding [mid=" + mid + ", pidH=" + pidH + ", pidW=" + pidW + "]";
-	}
-
-	public Wedding(Date date, Couple c) {
-
-		weddingDate = date;
-
-		couple = c;
-	}
 
 	public Date getWeddingDate() {
 
 		return weddingDate;
-
 	}
 
-	public Couple getCouple() {
-
-		return couple;
-
-	}
-
-	
 	@Override
 	public String toString() {
-		return "(" + husband + " ==== " + wife + ")";
+		return "(" + husband + " <=> " + wife + ")";
 	}
 
 

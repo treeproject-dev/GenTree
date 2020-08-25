@@ -2,11 +2,11 @@ package tree;
 
 import java.util.List;
 
-public interface Haul<Ti,To> {
+public interface Kleisli<Ti,To> {
 	
 	/***
 	 * This Interface is implemented for using lambda-functions.
-	 * They should be Kleislei-arrows and have signature:
+	 * They should be Kleisli-arrows and have signature:
 	 * 
 	 * 		k :: x -> [y]
 	 * 
@@ -19,7 +19,7 @@ public interface Haul<Ti,To> {
 	 * @return [out]
 	 */
 
-	//kleislei k :: Ti -> To
+	//kleisli k :: Ti -> To
 	public List<To> run(Ti in);
 	
 }

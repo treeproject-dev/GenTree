@@ -1,5 +1,6 @@
 package tree;
 
+import java.io.IOException;
 import java.util.List;
 
 import gentrees.*;
@@ -25,16 +26,16 @@ public interface TreeInterface {
 	/* BINDS */
 	
 	// (>>=)
-	public TreeInterface p$p(Haul<Person,Person> k);
-	public TreeInterface p$w(Haul<Person,Wedding> k);
-	public TreeInterface w$p(Haul<Wedding,Person> k);
-	public TreeInterface w$w(Haul<Wedding,Wedding> k);
+	public TreeInterface p$p(Kleisli<Person,Person> k);
+	public TreeInterface p$w(Kleisli<Person,Wedding> k);
+	public TreeInterface w$p(Kleisli<Wedding,Person> k);
+	public TreeInterface w$w(Kleisli<Wedding,Wedding> k);
 
 	// (>>)
-	public TreeInterface p_p(Haul<Person,Person> k);
-	public TreeInterface p_w(Haul<Person,Wedding> k);
-	public TreeInterface w_p(Haul<Wedding,Person> k);
-	public TreeInterface w_w(Haul<Wedding,Wedding> k);
+	public TreeInterface p_p(Kleisli<Person,Person> k);
+	public TreeInterface p_w(Kleisli<Person,Wedding> k);
+	public TreeInterface w_p(Kleisli<Wedding,Person> k);
+	public TreeInterface w_w(Kleisli<Wedding,Wedding> k);
 	
 	public List<Person> toPersons();
 	public List<Wedding> toWeddings();
@@ -72,5 +73,9 @@ public interface TreeInterface {
 	public TreeInterface loadChildren();
 
 	public String toJSON();
-			
+		
+	//temporary:
+	public void personsToJS(String filename) throws IOException;
+	public void personsToJSONFile(String filename) throws IOException;
+	
 }

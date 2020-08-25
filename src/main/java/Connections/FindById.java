@@ -22,7 +22,8 @@ public class FindById {
 	      ResultSet rs = preparedStatement.executeQuery();
 	      rs.next();
 	      
-	      person = new Person(rs.getString(2), rs.getString(3), rs.getString(6), rs.getDate(4), rs.getInt(7));
+	      person = new Person(rs.getString(2), rs.getString(3), rs.getString(6), rs.getDate(4));
+	      person.mid = rs.getInt(7);
 	      conn.conn.close();
 	      
 	      persons.add(person);
