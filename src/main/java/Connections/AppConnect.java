@@ -18,7 +18,12 @@ public class AppConnect
 {
 	@Autowired
     private Environment env;
+	private String name2;
 	
+	@Autowired
+    public void A(@Value("${spring.datasource.username}") String name2) {
+        this.name2 = name2;
+    }
 	
 	@Value("${my.name}")private String name;
 	
@@ -26,7 +31,7 @@ public class AppConnect
 	
 	public AppConnect(){
 		
-		//System.out.println("PRINT FROM ENV: "+ env.getProperty("spring.datasource.username"));
+		System.out.println("PRINT IT: "+ name2);
 	try {
 		
 		
