@@ -1,6 +1,9 @@
 package tree;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +18,9 @@ public class Tree implements TreeInterface {
 	public List<Person> persons;
 	public List<Wedding> weddings;
 
+	//temporary, technical:
+	int j = 1; // iterator to determine variables in personsToJS method.
+	
 	/* Constructors: */
 	
 	// Trivial constructor
@@ -104,7 +110,7 @@ public class Tree implements TreeInterface {
 
 	//[person] -> [person]' ; id [weddings] ;
 	@Override
-	public TreeInterface p$p(Haul<Person,Person> k) {
+	public TreeInterface p$p(Kleisli<Person,Person> k) {
 		Tree result = this.clone();
 		for (Person p : this.persons)
 			result.persons.addAll(k.run(p));	// <- concat . map
@@ -116,7 +122,7 @@ public class Tree implements TreeInterface {
 
 	//[wedding] -> [wedding]' ; id [person] ;
 	@Override
-	public TreeInterface w$w(Haul<Wedding,Wedding> k) {
+	public TreeInterface w$w(Kleisli<Wedding,Wedding> k) {
 		Tree result = this.clone();
 		for (Wedding w : this.weddings)
 			result.weddings.addAll(k.run(w));	
@@ -127,7 +133,7 @@ public class Tree implements TreeInterface {
 	
 	//[person] -> [wedding] ; id [person] ;
 	@Override
-	public TreeInterface p$w(Haul<Person,Wedding> k) {
+	public TreeInterface p$w(Kleisli<Person,Wedding> k) {
 		Tree result = this.clone();
 		for (Person p : this.persons)
 			result.weddings.addAll(k.run(p));	
@@ -138,7 +144,7 @@ public class Tree implements TreeInterface {
 	
 	//[wedding] -> [person]' ; id [weddings] ;
 	@Override
-	public TreeInterface w$p(Haul<Wedding,Person> k) {
+	public TreeInterface w$p(Kleisli<Wedding,Person> k) {
 		Tree result = this.clone();
 		for (Wedding w : this.weddings)
 			result.persons.addAll(k.run(w));	
@@ -152,7 +158,7 @@ public class Tree implements TreeInterface {
 	
 	//[person] -> [person]' ; id [weddings] ;
 	@Override
-	public TreeInterface p_p(Haul<Person,Person> k) {
+	public TreeInterface p_p(Kleisli<Person,Person> k) {
 		Tree result = new Tree();
 			 result.weddings = this.weddings;	
 		for (Person p : this.persons)
@@ -164,7 +170,7 @@ public class Tree implements TreeInterface {
 	
 	//[wedding] -> [wedding]' ; id [person] ;
 	@Override
-	public TreeInterface w_w(Haul<Wedding,Wedding> k) {
+	public TreeInterface w_w(Kleisli<Wedding,Wedding> k) {
 		Tree result = new Tree();
 			 result.persons = this.persons;		// <- id
 		for (Wedding w : this.weddings)
@@ -176,7 +182,7 @@ public class Tree implements TreeInterface {
 	
 	//[person] -> [wedding] ; id [person] ;
 	@Override
-	public TreeInterface p_w(Haul<Person,Wedding> k) {
+	public TreeInterface p_w(Kleisli<Person,Wedding> k) {
 		Tree result = new Tree();
 			 result.persons = this.persons;		// <- id
 		for (Person p : this.persons)
@@ -188,7 +194,7 @@ public class Tree implements TreeInterface {
 	
 	//[wedding] -> [person]' ; id [weddings] ;
 	@Override
-	public TreeInterface w_p(Haul<Wedding,Person> k) {
+	public TreeInterface w_p(Kleisli<Wedding,Person> k) {
 		Tree result = new Tree();
 			 result.weddings = this.weddings;		// <- id
 		for (Wedding w : this.weddings)
@@ -348,6 +354,100 @@ public class Tree implements TreeInterface {
 //	public static void draw {};
 	
 	
+				/* TEMPORARY */
+	
+	
+	// Tree.persons -> File : "var jpersons = JSON"
+	public void personsToJSONFile(String filename)
+			throws IOException {
+		
+		try {	
+			PrintWriter writer = new PrintWriter(new FileWriter(filename, false));
+
+			writer.write("//Persons:\n");
+			writer.write("var jpersons = ");
+			
+			List<String> ls =	this.persons.stream() 
+									.map( p -> { String str = p.toJSONStr();
+		                                     	return str; })
+									.collect(Collectors.toList());
+		
+			String str = String.join(" , ",ls);
+		
+			writer.write("'["+str+"]'");
+			
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException x) { System.err.println("File cannot be open!");}
+		
+	}; 
+
+
+	
+	
+	// !!!!!! FINISH!!!!!
+	// Tree.weddings -> File : "var jweddings = JSON"
+		public void weddingsToJSONFile(String filename)
+				throws IOException {
+			
+			try {	
+				PrintWriter writer = new PrintWriter(new FileWriter(filename, false));
+
+				writer.write("//Persons:\n");
+				writer.write("var jpersons = ");
+				
+				List<String> ls =	this.persons.stream() 
+										.map( p -> { String str = p.toJSONStr();
+			                                     	return str; })
+										.collect(Collectors.toList());
+			
+				String str = String.join(" , ",ls);
+			
+				writer.write("'["+str+"]'");
+				
+				writer.flush();
+				writer.close();
+				
+			} catch (IOException x) { System.err.println("File cannot be open!");}
+			
+		}; 
+	
+	
+	
+	
+	
+	
+	// for X in Tree.persons -> File : "var personX = `{JSON}`;"			
+	public void personsToJS(String filename) throws IOException {
+
+//		int j = 0;
+		
+		try {	
+			PrintWriter writer = new PrintWriter(new FileWriter(filename, false));
+
+			writer.print("//Persons\n");
+			writer.print("var amountOfPersons = "+this.persons.size()+";");
+			
+			
+			List<String> ls =	this.persons.stream() 
+									.map( p -> { String str = "\n\nvar person" +
+												 Integer.toString(j) + 
+												 " = " +"`"+p.toJSON()+"`";
+		                                     	j++;
+		                                     	return str; })
+									.collect(Collectors.toList());
+		
+			String str = String.join("; ",ls);
+		
+			writer.write(str+";");
+
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException x) { System.err.println("File cannot be open!");}
+		
+	}; 
 	
 	
 	
@@ -367,7 +467,9 @@ public class Tree implements TreeInterface {
 		for (int i=0; i<=19; i++) {
 			if (i%2==0)      g = "female";
 				else 		 g = "male";
-			ps.add(new Person(Integer.toString(i),"example",g) );
+//			ps.add(new Person(Integer.toString(i),"example",g) );
+			ps.add(new Person("person"+Integer.toString(i),"",g) );
+						
 		}
 		
 		//create weddings
@@ -443,9 +545,7 @@ public class Tree implements TreeInterface {
 	} 
 	
 	//Tests
-	public static void main(String[] args) {
-		Test a = () -> {return "Hi\n";};
-		System.out.print( a.run() );
+	public static void main(String[] args) throws IOException {
 		
 		Person x = new Person("Charles","Darwin","12.02.1809");
 		Person y = x;
@@ -511,6 +611,31 @@ public class Tree implements TreeInterface {
 		
 		ps = p4.search().addParents().gainWeddings(t).addChildrenFromWeddings(t).toPersons();
 		System.out.println("ps:\t"+ps);
+		
+		System.out.println("LAST:");
+
+		ps = p0.search().addFamilies(t).addChildrenFromWeddings(t).toPersons();
+				
+				//.addParents().addWeddings(t).addChildrenFromWeddings(t)
+						//.toPersons();
+		
+		System.out.println(ps);
+		
+		System.out.println("JS:");
+		String path = "/home/student/workspace/GenTree/gui/";
+		
+		/*
+		p4.search().addParents().addWeddings(t).addChildrenFromWeddings(t)
+				   //.personsToJS(path+"persons.js");
+					.personsToJSONFile(path+"persons.js");
+		*/
+		
+		Tree t2 = new Tree(ps,null);
+		//t2.personsToJSONFile(path+"persons.js");
+		
+		System.out.println(w1.toJson());
+		
+		
 		
 		/*
 		Person person = t.persons.get(0);
